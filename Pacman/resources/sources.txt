@@ -1,0 +1,10 @@
+sources
+
+sprites:https://www.spriters-resource.com/arcade/pacman/sheet/52631/
+	https://www.pinterest.com/pin/104638391312169808/
+
+title_screen: https://www.gamesdatabase.org/media/msx/artwork-title-screen/pac-man
+
+high_score screen: https://www.highscoresaves.com/media/catalog/product/cache/1/thumbnail/600x600/9df78eab33525d08d6e5fb8d27136e95/p/a/pacman_multigame_kit_highscoresaves_3_1.png
+
+sounds: http://samplekrate.com/drumkit.php?id=34
