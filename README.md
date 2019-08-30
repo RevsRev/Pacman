@@ -22,3 +22,7 @@ In the original game, some special squares limited the ghosts movement options. 
 Game doesn't briefly slow down as you eat a ghost, as was in the original.
 
 Energiser tablet times do not yet change with level.
+
+TO USE
+
+Ensure everything inside the first Pacman folder is in the same directory on your PC. Then run the Pacman.py file (I have been doing this from the command line).
