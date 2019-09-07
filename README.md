@@ -25,4 +25,4 @@ Energiser tablet times do not yet change with level.
 
 TO USE
 
-Ensure everything inside the first Pacman folder is in the same directory on your PC. Then run the Pacman.py file (I have been doing this from the command line).
+Ensure everything inside the first Pacman folder is in the same directory on your PC. Also ensure you have the pyglet module installed (pip install is the easiest way to get it if not). Finally, manually change the high scores directory in the pacman.py and scoring.py game modules (since I have not yet changed the paths to relative paths, annoying I know!)
