@@ -24,8 +24,13 @@ free_index = 0 #used for timing respawns as well as ghost eating points
 score = 0
 (low_score, high_score) = scoring.get_low_and_high_scores()
 score_text, high_score_text = "0", "0"
+name_text = ""
+f = open("C:/Users/Eddie Revell/Documents/Learning Python/Games/Pacman/game/high_scores.txt", "r")
+scores_list = f.read()
+f.close()
+entered_score = False
 
-Pacman = PacMan.Pacman(spawn_location = (width/2, height/4+sprite_board.grid_square_height/2),
+Pacman = PacMan.Pacman(spawn_location = (width/2, height/4+sprite_board.grid_square_height/2), lives = 2,
     batch = main_batch, board = sprite_board)
 Pacman.scale = game_scale
 Pacman.universal_speed = 0.9*game_scale
@@ -95,7 +100,7 @@ game_window.push_handlers(menu_controls)
 
 @game_window.event
 def on_draw():
-    global score_text, high_score_text, score, high_score, name_text
+    global score_text, high_score_text, score, low_score, high_score, name_text, scores_list, message, document
     high_score = max(high_score, score)
     if game_state == "title_screen":
         title_img.blit(width/2,height/2)
@@ -112,6 +117,25 @@ def on_draw():
         resources.game_over_img.width = sprite_board.grid_square_width*10
         resources.center_image(resources.game_over_img)
         resources.game_over_img.blit(width/2,height*15.5/36)
+    elif game_state == "score_screen":
+        game_window.clear()
+        if score > low_score and not(entered_score):
+            message = "Well done for scoring in the top 10!\nPlease enter your name:"
+            document = pyglet.text.decode_text((message + "\n\n" + name_text + "\n\n" + scores_list))
+        elif entered_score and score>0:
+            scoring.save_score_to_file(score, name_text)
+            f = open("C:/Users/Eddie Revell/Documents/Learning Python/Games/Pacman/game/high_scores.txt", "r")
+            scores_list = f.read()
+            f.close()
+            score = 0
+        else:
+            message = "The top scores are:"
+            document = pyglet.text.decode_text((message + "\n\n" + scores_list))
+        document.set_style(start=width/4, end=3*width/4,
+            attributes= dict(font_size = 12, color = (255, 255, 255, 255), font_name = "Times New Roman"))
+        text_layout = pyglet.text.layout.TextLayout(document = document,
+            width = width, height = height, multiline = True)
+        text_layout.draw()
     else:
         game_window.clear()
         board_img.blit(width/2,height/2)
@@ -141,8 +165,9 @@ score_objects = []
 def update(dt):
     global game_state, free_index, Ghosts, preferred_ghost_index,\
         energiser_pellet_locations, pellet_dictionary, level, level_timer,\
-        score, score_objects, game_scale
+        score, score_objects, game_scale, name_text, entered_score
     if game_state == "title_screen":
+        entered_score = False
         if menu_controls[key.SPACE]:
             game_state = "level_start"
     elif game_state == "level_start":
@@ -212,6 +237,7 @@ def update(dt):
             for state in game_states:
                 if state == "game_over":
                     game_state = "game_over"
+                    free_index = 0
                     break
                 elif state == "respawning":
                     game_state = "respawning"
@@ -246,6 +272,17 @@ def update(dt):
             game_state = "playing"
         else:
             free_index += 1
+    elif game_state == "game_over":
+        free_index+=1
+        if free_index == 120:
+            game_state = "score_screen"
+            free_index = 0
+    elif game_state == "score_screen":
+        if free_index == 0 and not(entered_score) and score>low_score:
+            name_text = level_controllers.user_input(menu_controls, name_text)
+        if menu_controls[key.ENTER]:
+            entered_score = True
+        free_index = (free_index + 1)%5
 
 pyglet.clock.schedule_interval(update, 1/120.0)
 
